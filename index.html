@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CreatorCatalyst</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #081129;
+            --card: rgba(255, 255, 255, 0.04);
+            --glass: rgba(255, 255, 255, 0.06);
+            --accent: linear-gradient(90deg, #ff8a00, #ff3cac);
+            --muted: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            background: radial-gradient(1200px 600px at 10% 10%, rgba(255, 140, 0, 0.06), transparent),
+                linear-gradient(180deg, var(--bg-1), var(--bg-2));
+            color: #e6eef8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.45;
+            padding: 1.25rem;
+        }
+
+        /* Layout */
+        .app {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        /* Sidebar */
+        .sidebar-toggle {
+            position: fixed;
+            left: 1rem;
+            top: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 1.35rem;
+            padding: 0.6rem 0.7rem;
+            border-radius: 10px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.5);
+            cursor: pointer;
+            z-index: 1200;
+            transition: transform .18s ease, background .18s;
+        }
+
+        .sidebar-toggle:active {
+            transform: scale(.98)
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 260px;
+            transform: translateX(-110%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 1100;
+            transition: transform .32s cubic-bezier(.2, .9, .2, 1);
+            backdrop-filter: blur(8px) saturate(1.05);
+        }
+
+        .sidebar.open {
+            transform: translateX(0)
+        }
+
+        .sidebar h2 {
+            margin: 0 0 .25rem 0;
+            font-size: 1.05rem
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem
+        }
+
+        .sidebar li {
+            padding: .5rem .6rem;
+            border-radius: 10px;
+            cursor: default;
+            color: #cfe7ff88
+        }
+
+        /* Main container */
+        .main {
+            background: transparent;
+            padding: 1.25rem;
+            border-radius: 16px;
+        }
+
+        /* Hero */
+        .hero {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 1.6rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(2, 6, 23, 0.6);
+            overflow: hidden;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 260px
+        }
+
+        .hero-text h1 {
+            font-size: 1.9rem;
+            margin: 0 0 .5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px
+        }
+
+        .hero-text p {
+            margin: 0 0 1rem;
+            color: #d9eafc
+        }
+
+        .cta-button {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: .7rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255, 90, 120, 0.12);
+            transition: transform .15s ease, box-shadow .15s ease, opacity .12s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px)
+        }
+
+        .features {
+            display: flex;
+            gap: .6rem;
+            margin-top: 1rem;
+            flex-wrap: wrap
+        }
+
+        .feature {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: .5rem .75rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: .92rem
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 12px 35px rgba(2, 6, 23, 0.6);
+            transform: translateY(0);
+            transition: transform .35s ease
+        }
+
+        .hero-image img:hover {
+            transform: translateY(-6px) rotate(-1deg)
+        }
+
+        /* Tools grid */
+        h2.section-title {
+            margin: 1rem 0 0.6rem 0
+        }
+
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: .6rem;
+        }
+
+        .tool-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 1.1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 8px 30px rgba(2, 6, 23, 0.5);
+            transition: transform .18s ease, box-shadow .18s ease;
+            cursor: pointer;
+            min-height: 96px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: .35rem
+        }
+
+        .tool-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 50px rgba(2, 6, 23, 0.6)
+        }
+
+        .tool-card h3 {
+            margin: 0;
+            font-size: 1.05rem
+        }
+
+        .tool-card p {
+            margin: 0;
+            color: #bcd9ff
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 1.25rem;
+            text-align: center;
+            color: #9fbef5aa;
+            font-size: .92rem
+        }
+
+        /* Responsive tweaks */
+        @media (max-width:900px) {
+            .hero {
+                flex-direction: column
+            }
+
+            .sidebar {
+                width: 220px
+            }
+
+            .sidebar-toggle {
+                left: .6rem
+            }
+        }
+        /* === Radio Odisha Animation === */
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.radio-image {
+  width: 180px;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 2;
+}
+
+/* Radio waves effect */
+.radio-image::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #ff8a00;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite ease-out;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Speech bubble styling */
+.speech-bubble {
+  margin-top: 1rem;
+  background: var(--card);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 6px 15px rgba(2, 6, 23, 0.5);
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  max-width: 260px;
+}
+
+    </style>
+</head>
+
+<body>
+    <button class="sidebar-toggle" aria-label="Toggle sidebar" aria-expanded="false">☰</button>
+
+    <aside class="sidebar" id="sidebar" aria-hidden="true">
+        <h2>Creator Tools</h2>
+        <ul>
+            <li>📊 Channel Analytics</li>
+            <li>🧠 Strategy Generator</li>
+            <li>💡 Idea Vault</li>
+            <li>📅 Content Planner</li>
+            <li>💰 Monetization Planner</li>
+            <li>👥 Audience Insights</li>
+        </ul>
+    </aside>
+
+    <main class="app main" id="main">
+
+        <section data-aos="zoom-in" data-aos-duration="2000" href="#" class="hero" aria-labelledby="hero-title">
+            <div class="hero-text">
+                <h1 id="hero-title">Grow as a Content Creator</h1>
+                <p>Actionable insights and tools to help you succeed on YouTube, Instagram, and more.</p>
+                <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:center">
+                    <button class="cta-button">Connect Your Channel</button>
+                    <a href="#tools" style="align-self:center;color:#cde6ff;text-decoration:none;font-weight:600">Or
+                        explore tools ↓</a>
+                </div>
+
+                <div class="features" aria-hidden="true">
+                    <div class="feature">📊 Turn creativity into measurable growth</div>
+                    <div class="feature">🚀 Helping influencer's grow their content, faster</div>
+                    <div class="feature">⏰ Focus on creating — maximize your time</div>
+                </div>
+            </div>
+
+<div class="container">
+  <img src="radio-odisha.jpg" alt="Radio Odisha" class="radio-image">
+  <div class="speech-bubble">Hello Future Content Creators 🎙️</div>
+</div>
+
+
+
+
+    </section>
+
+        <h2 data-aos="fade-right" data-aos-duration="2000" href="#"id="tools" class="section-title">Tools</h2>
+        <section class="tools" aria-label="Creator tools list">
+
+            <div data-aos="fade-up" data-aos-duration="1500" href="#" class="tool-card" tabindex="0">
+                <h3>🧠 AI Video Hook Analyzer</h3>
+                <p>Gauge retention in your video's first 15 seconds.</p>
+            </div>
+            <a href="hashtag.html" style="text-decoration: none; color: inherit;">
+                
+                <div data-aos="fade-up" data-aos-duration="2000" href="#" class="tool-card" tabindex="0">
+                    <h3>⭐ Hashtag Recommender</h3>
+                    <p>Discover trending hashtags for your niche</p>
+                </div>
+            </a>
+
+            <div data-aos="fade-up" data-aos-duration="2500" href="#" class="tool-card" tabindex="0">
+                <h3>🖼 Thumbnail Analyzer</h3>
+                <p> Making your thumbnails more clickable.</p>
+            </div>
+
+            <div data-aos="fade-up" data-aos-duration="3000" href="#" class="tool-card" tabindex="0">
+                <h3>📅 Upload Time Optimizer</h3>
+                <p>Find the best times to post your content.</p>
+            </div>
+
+            <div data-aos="fade-up" data-aos-duration="3000" href="#" class="tool-card" tabindex="0">
+                <h3>🎨 Color Palette Generator</h3>
+                <p>Generate consistent brand colors for thumbnails.</p>
+            </div>
+
+            <div data-aos="fade-up" data-aos-duration="3000" href="#" class="tool-card" tabindex="0">
+                <h3>👥 Competitor Analyzer</h3>
+                <p>Compare performance with creators in your niche.</p>
+            </div>
+
+        </section>
+
+        <footer>
+            Built with ❤️ for creators — need tweaks? I can help change colors, spacing, or convert this to a component.
+        </footer>
+
+    </main>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggle = document.querySelector('.sidebar-toggle');
+        const main = document.getElementById('main');
+
+        function setAria(open) {
+            toggle.setAttribute('aria-expanded', open);
+            sidebar.setAttribute('aria-hidden', String(!open));
+        }
+
+        function toggleSidebar() {
+            const open = sidebar.classList.toggle('open');
+            setAria(open);
+        }
+
+        toggle.addEventListener('click', toggleSidebar);
+
+        // Close on click outside (mobile)
+        window.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !toggle.contains(e.target) && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                setAria(false);
+            }
+        });
+
+        // Close with Escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                setAria(false);
+            }
+        });
+
+        // allow Enter / Space to activate tool cards via keyboard
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    card.click();
+                }
+            });
+        });
+    </script>
+    
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init();
+</script>
+    
+</body>
+
+</html>

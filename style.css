@@ -1,0 +1,236 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f7fc;
+    color: #1a1a1a;
+    padding: 40px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* Sidebar Styles */
+.sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background-color: #d62884;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    padding: 30px 20px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.sidebar ul li:hover {
+    color: #d62884;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.hero-text {
+    max-width: 500px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    background-color: #d62884;
+    color: white;
+    padding: 14px 26px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.features {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.hero img {
+    max-width: 500px;
+    width: 100%;
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Tools */
+.tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.tool-card {
+    background: transparent;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.tool-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.tool-card p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Image */
+.image {
+    width: 400px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+    background-color: #f8f7fc;
+    box-shadow: 0 0 0 8px #f8f7fc;
+}
+
+@media (max-width: 600px) {
+    .sidebar-toggle {
+        top: 10px;
+        left: 10px;
+    }
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.tool-card:hover {
+    cursor: pointer;
+    background-color: #f0f0f0; /* Optional hover effect */
+}
+/* 🎙️ Radio Odisha Animation */
+.container {
+  position: relative;
+  display: inline-block;
+  perspective: 1000px;
+}
+
+.radio-image {
+  width: 350px;
+  border-radius: 20px;
+  transition: transform 0.6s ease;
+  box-shadow: 0 12px 35px rgba(2, 6, 23, 0.6);
+}
+
+.container:hover .radio-image {
+  transform: rotateY(15deg) scale(1.05);
+}
+
+.speech-bubble {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #6d28d9;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0ch;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.container:hover .speech-bubble {
+  opacity: 1;
+  animation: typing 3s steps(30, end) forwards;
+}
+
+@keyframes typing {
+  from { width: 0ch; }
+  to { width: 28ch; } /* adjust to text length */
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: #6d28d9 transparent transparent transparent;
+}
